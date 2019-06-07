@@ -2,6 +2,8 @@
 
 ### Improvements
 
+- fix(cluster): support configuring private and public endpoint access
+  [#154](https://github.com/pulumi/pulumi-eks/pull/154)
 - tests(cluster): enable test to replace cluster by adding more subnets
   [#150](https://github.com/pulumi/pulumi-eks/pull/150)
 - update(aws-k8s-cni): move from 1.4.1 -> 1.5.0
