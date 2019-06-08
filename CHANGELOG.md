@@ -2,6 +2,8 @@
 
 ### Improvements
 
+- fix(cluster): expose instanceRoles
+  [#155](https://github.com/pulumi/pulumi-eks/pull/155)
 - fix(cluster): support configuring private and public endpoint access
   [#154](https://github.com/pulumi/pulumi-eks/pull/154)
 - tests(cluster): enable test to replace cluster by adding more subnets
