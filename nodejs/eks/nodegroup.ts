@@ -37,6 +37,14 @@ export interface Taint {
 }
 
 /**
+ * InputTags represents an Input map type that can leverage dynamic string k/v
+ * for use on types that expect a k/v type with possible computed runtime values,
+ * such as special CloudFormation Tags. See
+ * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html.
+ */
+export type InputTags = pulumi.Input<{ [key: string]: pulumi.Input<string> }>;
+
+/**
  * NodeGroupArgs represents the common configuration settings for NodeGroups.
  */
 export interface NodeGroupBaseOptions {
@@ -150,12 +158,12 @@ export interface NodeGroupBaseOptions {
     /**
      * The tags to apply to the NodeGroup's AutoScalingGroup.
      */
-    autoScalingGroupTags?: { [key: string]: string };
+    autoScalingGroupTags?: pulumi.Input<InputTags>;
 
     /**
      * The tags to apply to the CloudFormation Stack of the Worker NodeGroup.
      */
-    cloudFormationTags?: { [key: string]: string };
+    cloudFormationTags?: pulumi.Input<InputTags>;
 }
 
 /**
@@ -565,16 +573,15 @@ async function computeWorkerSubnets(parent: pulumi.Resource, subnetIds: string[]
 /**
  * Iterates through the tags map creating AWS ASG-style tags
  */
-function tagsToAsgTags(tags: {[key: string]: string}): pulumi.Output<string> {
-    let output: pulumi.Input<string> = "";
-    for (const tag of Object.keys(tags)) {
-        output = pulumi.concat(output, pulumi.all([
-            tag,
-            tags[tag],
-        ]).apply(([k, v]) => `
-                          - Key: ${k}
-                            Value: ${v}
-                            PropagateAtLaunch: 'true'`));
-    }
-    return pulumi.output(output);
+function tagsToAsgTags(tagsInput: pulumi.Input<InputTags>): pulumi.Output<string> {
+    return pulumi.output(tagsInput).apply(tags => {
+        let output = "";
+        for (const tag of Object.keys(tags)) {
+            output +=        `
+                          - Key: ${tag}
+                            Value: ${tags[tag]}
+                            PropagateAtLaunch: 'true'`;
+        }
+        return output;
+    });
 }

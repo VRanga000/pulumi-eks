@@ -15,6 +15,8 @@
 import * as aws from "@pulumi/aws";
 import * as pulumi from "@pulumi/pulumi";
 
+import { InputTags } from "./nodegroup";
+
 export interface NodeGroupSecurityGroupOptions {
     /**
      * The VPC in which to create the worker node group.
@@ -29,7 +31,7 @@ export interface NodeGroupSecurityGroupOptions {
     /*
      * Key-value mapping of tags to apply to this security group.
      */
-    tags?: { [key: string]: string };
+    tags?: pulumi.Input<InputTags>;
 
     /**
      * The security group associated with the EKS cluster.

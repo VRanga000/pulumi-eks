@@ -20,7 +20,7 @@ import which = require("which");
 
 import { VpcCni, VpcCniOptions } from "./cni";
 import { createDashboard } from "./dashboard";
-import { createNodeGroup, NodeGroup, NodeGroupBaseOptions, NodeGroupData } from "./nodegroup";
+import { createNodeGroup, InputTags, NodeGroup, NodeGroupBaseOptions, NodeGroupData } from "./nodegroup";
 import { createNodeGroupSecurityGroup } from "./securitygroup";
 import { ServiceRole } from "./servicerole";
 import { createStorageClass, EBSVolumeType, StorageClass } from "./storageclass";
@@ -79,9 +79,9 @@ export interface CoreData {
     eksNodeAccess?: k8s.core.v1.ConfigMap;
     kubeconfig?: pulumi.Output<any>;
     vpcCni?: VpcCni;
-    tags?: { [key: string]: string };
+    tags?: pulumi.Input<InputTags>;
     nodeSecurityGroup?: aws.ec2.SecurityGroup;
-    nodeSecurityGroupTags?: { [key: string]: string };
+    nodeSecurityGroupTags?: pulumi.Input<InputTags>;
 }
 
 export function createCore(name: string, args: ClusterOptions, parent: pulumi.ComponentResource): CoreData {
@@ -406,7 +406,7 @@ export interface ClusterOptions {
     /**
      * The tags to apply to the cluster security group.
      */
-    clusterSecurityGroupTags?: { [key: string]: string };
+    clusterSecurityGroupTags?: pulumi.Input<InputTags>;
 
     /**
      * The tags to apply to the default `nodeSecurityGroup` created by the cluster.
@@ -414,7 +414,7 @@ export interface ClusterOptions {
      * Note: The `nodeSecurityGroupTags` option and the node group option
      * `nodeSecurityGroup` are mutually exclusive.
      */
-    nodeSecurityGroupTags?: { [key: string]: string };
+    nodeSecurityGroupTags?: pulumi.Input<InputTags>;
 
     /**
      * The size in GiB of a cluster node's root volume. Defaults to 20.
@@ -482,7 +482,7 @@ export interface ClusterOptions {
      * Key-value mapping of tags that are automatically applied to all AWS
      * resources directly under management with this cluster, which support tagging.
     */
-    tags?: { [key: string]: string };
+    tags?: pulumi.Input<InputTags>;
 
     /**
      * Desired Kubernetes master / control plane version. If you do not specify a value, the latest available version is used.
