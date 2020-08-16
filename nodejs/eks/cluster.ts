@@ -341,6 +341,7 @@ export function createCore(name: string, args: ClusterOptions, parent: pulumi.Co
         nodeAssociatePublicIpAddress: args.nodeAssociatePublicIpAddress,
         instanceType: args.instanceType,
         nodePublicKey: args.nodePublicKey,
+        encryptRootBockDevice: args.encryptRootBockDevice,
         nodeRootVolumeSize: args.nodeRootVolumeSize,
         nodeUserData: args.nodeUserData,
         minSize: args.minSize,
@@ -975,6 +976,11 @@ export interface ClusterOptions {
      * The tags to apply to the cluster security group.
      */
     clusterSecurityGroupTags?: InputTags;
+
+    /**
+     * Encrypt the root block device of the nodes in the node group.
+     */
+    encryptRootBockDevice?: pulumi.Input<boolean>;
 
     /**
      * The tags to apply to the default `nodeSecurityGroup` created by the cluster.
